@@ -5,7 +5,7 @@
 ## Pre-req
 - Fork the repository
 - Create a feature branch, named feature/FIRSTNAME-LASTNAME
-- Create an Angular, React or Vue application in the repo
+- Create an Angular application in the repo
 
 ## Task
 - Implement a simple search and select history function according to the FIGMA link (https://www.figma.com/file/RjhfsxK7lKOreCO7nprhEc/AA---FrontEnd-test)
