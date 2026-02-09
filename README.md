@@ -30,3 +30,4 @@
 ## Additional notes
 - Solve the task as far as you think is necessary.
 - When done push your branch and let us know it’s done, e.g. by a pull request.
+- branch name use your firstname_lastname
