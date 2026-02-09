@@ -9,7 +9,7 @@
 
 ## Task
 - Implement a simple search and select history function according to the FIGMA link (https://www.figma.com/file/RjhfsxK7lKOreCO7nprhEc/AA---FrontEnd-test)
-- The search should use a public REST API of choice 
+- The search should use a public REST API of choice (https://www.openbrewerydb.org/documentation#search-breweries)
     - A suggestion could be: https://api.openbrewerydb.org/breweries/search?page=1&per_page=5&query= (where you need to pass the search query as a string)
 - Search for anything
 - Display partial search results in a list beneath the search field (5) and an option to show all (let's say that 10 is the maximum)
