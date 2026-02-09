@@ -26,7 +26,7 @@
 - Component structuring
 - Folder structuring
 - HTML5 semantics, more complex SCSS logic (use of variables etc)
-- Unit tests
+- Unit tests (Reasonal coverage )
 
 ## Additional notes
 - Solve the task as far as you think is necessary.
