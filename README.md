@@ -11,6 +11,7 @@
 - Implement a simple search and select history function according to the FIGMA link (https://www.figma.com/file/RjhfsxK7lKOreCO7nprhEc/AA---FrontEnd-test)
 - The search should use a public REST API of choice (https://www.openbrewerydb.org/documentation#search-breweries)
     - A suggestion could be: https://api.openbrewerydb.org/breweries/search?page=1&per_page=5&query= (where you need to pass the search query as a string)
+    - See the docs here: ([Brewery API Docs](https://www.openbrewerydb.org/documentation/)).
 - Search for anything
 - Display partial search results in a list beneath the search field (5) and an option to show all (let's say that 10 is the maximum)
 - When making a selection the search value should be saved with date/timestamp beneath the search box, just like a search history.
@@ -31,3 +32,9 @@
 - Solve the task as far as you think is necessary.
 - When done push your branch and let us know it’s done, e.g. by a pull request.
 - branch name use your firstname_lastname
+
+## 🤖 AI Usage Policy
+
+* You are allowed to **research and learn from documentation or AI tools**.
+* **Directly using AI to write or submit code** will be considered a violation and may negatively impact evaluation.
+* The goal is to assess **your understanding, problem-solving, and coding style**.
