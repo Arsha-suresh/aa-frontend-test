@@ -1,0 +1,37 @@
+.tableContainer{
+    margin-top: 20px;
+    background-color: var(--ramp-blue-100);
+    border:1px solid var(--ramp-blue-400);
+    border-radius: 5px;
+    cursor: pointer;
+    table{
+        width:100%;
+        tr{
+        border: 1px solid var(--grey);
+       
+        .deleteButton{
+                background-color: inherit;
+                border: none;
+        }
+    }
+    tr:hover{
+        background-color: var(--ramp-blue-400);}
+    }
+
+    .pagination{
+        display: flex;  
+        justify-content: center;
+        padding: 20px;
+        gap:10px;   
+        button{
+             background-color: inherit;
+             border: none;
+             color :var(--ramp-blue-400);
+             cursor: pointer;
+                &:disabled{
+                    color: var(--grey);
+                }   
+        }
+    }
+    
+}

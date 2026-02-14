@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+    --ramp-blue-100: #f2f9ff;
+    --ramp-blue-200: #e5f4ff;
+    --ramp-blue-300: #bde3ff;
+    --ramp-blue-400: #80caff;
+    --ramp-blue-500: #0d99ff;
+    --ramp-blue-600: #007be5;
+    --ramp-blue-700: #0768cf;
+    --ramp-blue-800: #034ac1;
+    --ramp-blue-900: #093077;
+    --white:#FFFFFF;
+    --red:rgb(190, 45, 45);
+    --grey: rgb(128, 128, 128);
+}
+
+html{
+    background-image: linear-gradient(to bottom, var(--ramp-blue-900), var(--ramp-blue-400));
+    width:99%;
+    height:99.9%;
+    overflow: hidden;
+}

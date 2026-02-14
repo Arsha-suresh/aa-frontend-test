@@ -1,0 +1,46 @@
+<form novalidate [formGroup]="form">
+<div class="searchContainer">
+    
+    <input type="search" formControlName="query" class="search">
+    <button class="searchButton" type="submit" (click)="search()"></button>
+  
+</div>
+</form>
+ <div class="container">
+
+
+@if( isError){
+    <div class="error">
+        <span class="errorMessage">Please enter a search term</span>
+    </div>
+}
+@else {
+    @if(showResultsAndHistory()){
+        <div>
+    <app-search-history (reRunSearch)="reRunSearch($event)" ></app-search-history>
+</div>
+         <app-table [data]="tableData" [columns]="columns" 
+    (nextPageOutput)="nextPageOutput()" (prevPageOutput)="prevPageOutput()"
+     (selId)="showDetails($event)" [page]="page()" [disableNext]="disableNext"></app-table>
+    
+        
+        
+    }
+    @else if(showEachResult()){
+        <div class="resultsContainer">
+            <div class="title">{{selectedBrewery?.name}} <button class="close"(click)="closeDetailsPage()">X</button></div>
+            <div class="details">
+                <div><span class="bold">Name:</span> {{selectedBrewery?.name}}</div>
+                <div><span class="bold">Type:</span> {{selectedBrewery?.breweryType}}</div>
+                <div><span class="bold">Address:</span> {{selectedBrewery?.street}}, {{selectedBrewery?.city}}, {{selectedBrewery?.state}}, {{selectedBrewery?.postalCode}}</div>
+                <div><span class="bold">Phone:</span> {{selectedBrewery?.phone}}</div>
+                <div><span class="bold">Website:</span> <a [href]= "url" target="_blank">{{selectedBrewery?.websiteUrl}}</a></div>    
+            
+        </div>
+    </div>   
+   }
+}
+</div>  
+
+
+

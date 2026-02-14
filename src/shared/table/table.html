@@ -1,0 +1,52 @@
+@if((data() && data().data && data().data.length > 0 )|| page()>1){
+    <div class="tableContainer">
+    <table >
+        @if(!hideColumn()){
+        <thead>
+            <tr>
+                @for( column of columns(); track column){
+                    <th>{{column.label}}</th>
+                }
+            </tr>
+        </thead>
+      }
+        <tbody>
+            @if(data() && data().data && data().data.length > 0){  
+            @for( row of data().data; track $index){
+                <tr (click)="onRowClick(row['id'])">
+                    @for( column of columns(); track $index){
+                        <td>{{row[column.key]}}</td>
+                    }
+                    @if(enableDeleteRow()){
+                    <td><button class="deleteButton" (click)="deleteRow(row[deleteKey()], $event)">x</button></td>
+                    }
+                </tr>
+            }
+        }@else{
+            <ng-container *ngTemplateOutlet="emptyTemplate"></ng-container>
+        }
+        </tbody>
+
+    </table>
+    @if(!hidePagination()){
+    <div class="pagination">
+        <button (click)="prevPage()" [disabled]="page() === 1">Previous</button>
+        <span>Page {{page()}}</span>
+        <button (click)="nextPage()" [disabled]="disableNext()">Next</button>
+    </div>
+}
+    </div>
+
+}
+@else{
+   <ng-container *ngTemplateOutlet="emptyTemplate"></ng-container>
+}
+
+ <ng-template #emptyTemplate>
+     @if(data() && !data().data){
+        <div class="empty">
+         <span>No Results found</span>
+     </div>
+     }
+    </ng-template>
+
