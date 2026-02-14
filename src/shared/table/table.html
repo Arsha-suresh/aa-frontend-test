@@ -43,7 +43,7 @@
 }
 
  <ng-template #emptyTemplate>
-     @if(data() && !data().data){
+     @if(data() && data().data.length === 0){
         <div class="empty">
          <span>No Results found</span>
      </div>

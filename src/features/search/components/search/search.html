@@ -6,12 +6,23 @@
   
 </div>
 </form>
- <div class="container">
+ <div class="container scroll-container">
 
 
 @if( isError){
+
     <div class="error">
-        <span class="errorMessage">Please enter a search term</span>
+        <span class="errorMessage">
+            @if(form.get('query')?.hasError('required')){
+                Please enter a search query.
+            }
+            @else if(form.get('query')?.hasError('minlength')){
+                Search query must be at least 3 characters long.
+            }
+            @else {
+                An error occurred while fetching data. Please try again later.
+            }
+        </span>
     </div>
 }
 @else {

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { TableData } from '@shared/models/table-data.model';
 import { BehaviorSubject } from 'rxjs';
+import { LocalStorageKey } from '../constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorage {
    private searchHistorySubject = new BehaviorSubject<Array<TableData>>(
+    this.getItem<Array<TableData>>(LocalStorageKey)??
    []
   );
   searchHistory$ = this.searchHistorySubject.asObservable();

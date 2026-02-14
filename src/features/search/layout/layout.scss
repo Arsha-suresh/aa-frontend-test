@@ -1,5 +1,29 @@
+
 .container {
-  display: flex;
+ display: flex;
   justify-content: center; /* horizontal */
   align-items: center; 
+  width: 100%;
+  .box{
+    width:100%;
+  }
+}
+
+
+/* tablet+ */
+@media (min-width: 768px) {
+  .container {
+    .box{
+    width:60%;
+  }
+  }
+}
+
+/* desktop+ */
+@media (min-width: 1024px) {
+  .container {
+    .box{
+    width:50%;
+  }
+  }
 }

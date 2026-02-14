@@ -12,6 +12,7 @@ import { SearchHistory } from '../search-history/search-history';
 import { DatePipe } from '@angular/common';
 import { LocalStorageKey } from '@features/search/constants';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { catchError, debounceTime, distinctUntilChanged, of } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -50,16 +51,31 @@ export class Search implements OnInit {
   
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      query: ['', [Validators.required]]
+      query: ['', [Validators.required,Validators.minLength(3)]],
     });
+    this.form.get('query')?.valueChanges
+  .pipe(
+    debounceTime(400),
+    distinctUntilChanged(),
+    takeUntilDestroyed(this.destroyRef)
+  )
+  .subscribe(value => {
+    if(value.trim() == '') {
+      this.tableData = null as unknown as TableInput;
+      this.isError = false;
+      this.changeRef.markForCheck();
+      this.changeRef.detectChanges();
+    }
+  });
 
     
   }
 
-  search(searchQuery?: string) {
+  search() {
     this.page.set(1);
-    this.query =  searchQuery??this.form.get('query')?.value;
-    if (this.query) {
+    this.query =  this.form.get('query')?.value;
+    this.isError = false;
+    if (this.query.trim() !== '' && this.form.valid) {
       this.store.clearBreweries();
       this.loadUsers();
     
@@ -78,7 +94,9 @@ export class Search implements OnInit {
 
 
   reRunSearch(query: string) {
-   this.search(query);
+    this.form.get('query')?.setValue(query);
+   this.search();
+   
   }
 
  
@@ -95,12 +113,20 @@ export class Search implements OnInit {
     this.showResultsAndHistory.set(true);
   }
 
-  loadUsers() {
+  loadUsers() { 
+      this.isError = false;
       this.facade.searchBreweries(this.query, this.page()).pipe(
         takeUntilDestroyed(this.destroyRef),
+        catchError((error) => {
+          console.error('Error fetching breweries:', error);
+          this.isError = true;
+          this.changeRef.markForCheck();
+          this.changeRef.detectChanges();
+          return of([]);;
+        })
       ).subscribe(result => {
        
-         this.tableData = { data: result.map(brewery => ({
+         this.tableData = { data: result?.map(brewery => ({
           id: brewery.id,
           name: brewery.name,
           brewery_type: brewery.breweryType,

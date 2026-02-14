@@ -10,7 +10,7 @@
     --ramp-blue-800: #034ac1;
     --ramp-blue-900: #093077;
     --white:#FFFFFF;
-    --red:rgb(190, 45, 45);
+    --red:rgb(227 149 149);;
     --grey: rgb(128, 128, 128);
 }
 
@@ -19,4 +19,29 @@ html{
     width:99%;
     height:99.9%;
     overflow: hidden;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  scrollbar-width: thin; 
+  scrollbar-color: transparent transparent; 
+}
+
+
+.scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); 
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }

@@ -6,7 +6,7 @@
    .search {
   width: 300px;
   height: 40px;
-  position: relative; /* REQUIRED for ::after positioning */
+  position: relative; 
   border: none;
   outline: none;
   flex: 1;
@@ -54,7 +54,7 @@
                 border: none;
                 font-size: 24px;
                 cursor: pointer;
-                margin-left: 20px;
+                float:right;
             }
         }
         .details{
@@ -72,4 +72,12 @@
         overflow-y: auto;
     }
 
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  /* tablet landscape styles */
+  .container{
+     height:65vh;
+     overflow-y:auto;
+  }
 }

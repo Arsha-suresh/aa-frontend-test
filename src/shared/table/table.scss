@@ -13,6 +13,11 @@
                 background-color: inherit;
                 border: none;
         }
+
+        td{
+            padding: 10px;
+            text-align: left;
+        }
     }
     tr:hover{
         background-color: var(--ramp-blue-400);}
