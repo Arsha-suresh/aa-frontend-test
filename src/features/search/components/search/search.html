@@ -13,6 +13,7 @@
 
     <div class="error">
         <span class="errorMessage">
+            <span>
             @if(form.get('query')?.hasError('required')){
                 Please enter a search query.
             }
@@ -22,14 +23,22 @@
             @else {
                 An error occurred while fetching data. Please try again later.
             }
+            </span>
+            <span class="close" (click)="clearError()">x</span>
         </span>
+        
     </div>
 }
 @else {
     @if(showResultsAndHistory()){
         <div class="history">
+            
     <app-search-history (reRunSearch)="reRunSearch($event)" ></app-search-history>
 </div>
+@if(isloading()){
+    <div class="loader"></div>
+}
+
        <div class="searchResults">  <app-table [data]="tableData" [columns]="columns" 
     (nextPageOutput)="nextPageOutput()" (prevPageOutput)="prevPageOutput()"
      (selId)="showDetails($event)" [page]="page()" [disableNext]="disableNext"></app-table>
@@ -40,7 +49,7 @@
     }
     @else if(showEachResult()){
         <div class="resultsContainer">
-            <div class="title">{{selectedBrewery?.name}} <button class="close"(click)="closeDetailsPage()">X</button></div>
+            <div class="title"><div class="name">{{selectedBrewery?.name}}</div><div><button class="close"(click)="closeDetailsPage()">X</button></div> </div>
             <div class="details">
                 <div><span class="bold">Name:</span> {{selectedBrewery?.name}}</div>
                 <div><span class="bold">Type:</span> {{selectedBrewery?.breweryType}}</div>

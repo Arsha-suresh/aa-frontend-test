@@ -25,6 +25,7 @@ export class LocalStorage {
     if (existing) {
       
      existing.push(value);
+     existing.sort((a,b)=>-(<number>a['sortkey']-<number>b['sortkey']));
       this.setItem(key, existing);
       this.searchHistorySubject.next(existing);
     } else {
@@ -41,4 +42,9 @@ deleteItem(localstorageKey:string,key: string) {
     this.searchHistorySubject.next(updated);
   }  
 }
+clearAll(key:string){
+   localStorage.removeItem(key)
+   this.searchHistorySubject.next([]);
+  }
 }
+

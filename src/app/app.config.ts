@@ -8,8 +8,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    provideHttpClient(),
-    provideHttpClientTesting()
+    provideRouter(routes),    
+    provideHttpClientTesting(),
+    provideHttpClient()
   ]
 };

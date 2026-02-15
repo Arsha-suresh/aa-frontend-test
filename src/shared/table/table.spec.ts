@@ -73,4 +73,10 @@ describe('Table', () => {
     const headers = fixture.nativeElement.querySelectorAll('th');
     expect(headers.length).toBe(0);
   });
+  it('should hide columns if empty template is shown', () => {
+    fixture.componentRef.setInput('data', {data:[]});
+    fixture.detectChanges();
+    const emptyText = fixture.nativeElement.querySelector('.empty span').textContent;
+    expect(emptyText).toContain("No Results found");
+  });
 });

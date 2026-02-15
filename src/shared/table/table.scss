@@ -6,8 +6,8 @@
     cursor: pointer;
     table{
         width:100%;
+         border-collapse: collapse;
         tr{
-        border: 1px solid var(--grey);
        
         .deleteButton{
                 background-color: inherit;
@@ -38,5 +38,15 @@
                 }   
         }
     }
+    .empty{
+        float: right;
+        padding-top: 20px;
+    }
+
     
 }
+.empty{
+        
+        padding-top: 20px;
+        color:var(--ramp-blue-100);
+    }

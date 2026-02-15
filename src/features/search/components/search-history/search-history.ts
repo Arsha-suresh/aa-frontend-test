@@ -1,14 +1,15 @@
 
-import { Component, DestroyRef, inject, OnInit, output } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LocalStorageKey } from '@features/search/constants';
 import { LocalStorage } from '@features/search/services/local-storage';
+import { ConfirmModal } from '@shared/confirm-modal/confirm-modal';
 import { TableInput } from '@shared/models/table-input.model';
 import { Table } from '@shared/table/table';
 
 @Component({
   selector: 'app-search-history',
-  imports: [ Table],
+  imports: [ Table, ConfirmModal],
   templateUrl: './search-history.html',
   styleUrl: './search-history.scss',
 })
@@ -20,6 +21,9 @@ export class SearchHistory implements OnInit {
   columns = [{ label: 'Query', key: 'label'   }];
   page = 1;
   reRunSearch = output<string>();
+   showModal =signal(false);
+  title = signal('Confirm Search History Deletion');
+  message = signal('Are you sure to clear history Item');
 
   ngOnInit(): void {
    this.localStore.searchHistory$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(history => {
@@ -36,6 +40,19 @@ export class SearchHistory implements OnInit {
   deleteRow(label: string) {
     this.localStore.deleteItem(LocalStorageKey,label)
   };
+
+  clear(){
+    this.showModal.set(false);
+    this.localStore.clearAll(LocalStorageKey);
+
+
+   }
+
+   showConfirmModal(){
+    this.showModal.set(true);
+
+   }
+   
   
 
 }

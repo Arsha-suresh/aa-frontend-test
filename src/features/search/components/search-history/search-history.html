@@ -1,6 +1,6 @@
 @if (historyArray.data.length > 0) {
     <div class="historyContainer">
-        <h3>Search History</h3>
+        <h3>Search History <span class="clear" (click)="showConfirmModal()">Clear All</span></h3>
         <div class="resultsContainer scroll-container">
         <app-table [disableNext]="false" 
 [hideColumn]="true"
@@ -13,5 +13,6 @@
     </div>
     </div>
     
+    <app-confirm-modal [title]="title()" (confirm)="clear()" [message]="message()" [showModal]="showModal()"></app-confirm-modal>
 
 }

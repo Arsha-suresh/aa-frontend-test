@@ -16,10 +16,10 @@ import { catchError, debounceTime, distinctUntilChanged, of } from 'rxjs';
 
 @Component({
   selector: 'app-search',
-  imports: [ReactiveFormsModule,Table, SearchHistory],
+  imports: [ReactiveFormsModule, Table, SearchHistory],
   templateUrl: './search.html',
   styleUrl: './search.scss',
-  providers:[DatePipe],
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Search implements OnInit {
@@ -32,87 +32,96 @@ export class Search implements OnInit {
   form!: FormGroup;
   destroyRef = inject(DestroyRef);
   isError = false;
-  tableData! :TableInput;
+  tableData!: TableInput;
   store = inject(Store);
   columns = [
     { label: 'Name', key: 'name' },
-    { label: 'Brewery Type', key: 'brewery_type' }, 
+    { label: 'Brewery Type', key: 'brewery_type' },
     { label: 'City', key: 'city' },
   ]
   page = signal(1);
   query = '';
   disableNext = false;
   showResultsAndHistory = signal(true);
-  showEachResult = computed(()=>{return !this.showResultsAndHistory() });
-  selectedBrewery :Brewery| null = null;
+  showEachResult = computed(() => { return !this.showResultsAndHistory() });
+  selectedBrewery: Brewery | null = null;
   url!: SafeUrl;
-  
+  isloading = signal(false);
+  isSearchHistoryUpdated = signal(true);
 
-  
+
+
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      query: ['', [Validators.required,Validators.minLength(3)]],
+      query: ['', [Validators.required, Validators.minLength(3)]],
     });
     this.form.get('query')?.valueChanges
-  .pipe(
-    debounceTime(400),
-    distinctUntilChanged(),
-    takeUntilDestroyed(this.destroyRef)
-  )
-  .subscribe(value => {
-    if(value.trim() == '') {
-      this.tableData = null as unknown as TableInput;
-      this.isError = false;
-      this.changeRef.markForCheck();
-      this.changeRef.detectChanges();
-    }
-  });
+      .pipe(
+        debounceTime(100),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(value => {
+        if (value.trim() == '') {
+          this.tableData = null as unknown as TableInput;
+          this.isError = false;
+          this.changeRef.markForCheck();
+          this.changeRef.detectChanges();
+        }
+      });
 
-    
+
   }
 
   search() {
     this.page.set(1);
-    this.query =  this.form.get('query')?.value;
+    this.query = this.form.get('query')?.value;
     this.isError = false;
     if (this.query.trim() !== '' && this.form.valid) {
       this.store.clearBreweries();
       this.loadBreweries();
-    
+
     } else {
       this.tableData = null as unknown as TableInput;
       this.isError = true;
       this.changeRef.markForCheck();
       this.changeRef.detectChanges();
-      
+
     }
-    const date =Date.now();
-    const localHistory:TableData= {  label: `${this.query} ${this.datepipe.transform(date, "dd-MM-yyyy HH:mm:ss")} `, id:this.query };
-    this.localStore.updateItem(LocalStorageKey, localHistory);
-    
+
+
   }
 
 
   reRunSearch(query: string) {
     this.form.get('query')?.setValue(query);
-   this.search();
-   
-  } 
-
-  showDetails(event:string){
-    const breweryId = event;
-    this.selectedBrewery = this.store.breweries()[breweryId];
-    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.selectedBrewery?.websiteUrl??'');
-    this.showResultsAndHistory.set(false);
+    this.search();
 
   }
-  closeDetailsPage(){
+
+  showDetails(event: string) {
+    const breweryId = event;
+    this.selectedBrewery = this.store.breweries()[breweryId];
+    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.selectedBrewery?.websiteUrl ?? '');
+    this.showResultsAndHistory.set(false);
+    if (!this.isSearchHistoryUpdated()) {
+      const date = Date.now();
+      const localHistory: TableData = { label: `${this.query} ${this.datepipe.transform(date, "dd-MM-yyyy HH:mm:ss")} `, id: this.query, sortkey: date };
+      this.localStore.updateItem(LocalStorageKey, localHistory);
+      this.isSearchHistoryUpdated.set(true);
+    }
+
+  }
+  closeDetailsPage() {
     this.selectedBrewery = null;
     this.showResultsAndHistory.set(true);
   }
 
-  loadBreweries() { 
+  loadBreweries() {
+    try {
       this.isError = false;
+      this.isloading.set(true);
+      this.isSearchHistoryUpdated.set(false);
       this.facade.searchBreweries(this.query, this.page()).pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
@@ -120,38 +129,52 @@ export class Search implements OnInit {
           this.isError = true;
           this.changeRef.markForCheck();
           this.changeRef.detectChanges();
+          this.isloading.set(false);
           return of([]);;
         })
       ).subscribe(result => {
-       
-         this.tableData = { data: result?.map(brewery => ({
-          id: brewery.id,
-          name: brewery.name,
-          brewery_type: brewery.breweryType,
-          city: brewery.city
-        })) };
-         this.store.setBreweries(result); 
-         this.isError = false;
-         this.changeRef.detectChanges();
 
-     });
-  
-}
 
-nextPageOutput() {
-  this.page.update(n => n + 1);
-  this.loadBreweries();
-  if (this.tableData.data.length ==0 || this.tableData.data.length < 5) {
-    this.disableNext = true;
+        this.tableData = {
+          data: result?.map(brewery => ({
+            id: brewery.id,
+            name: brewery.name,
+            brewery_type: brewery.breweryType,
+            city: brewery.city
+          }))
+        };
+        this.store.setBreweries(result);
+        this.isError = false;
+        this.changeRef.detectChanges();
+        this.isloading.set(false);
+
+      });
+    } catch (error) {
+      this.isError = true;
+      console.error("unexpected error ocurred")
+    }
+
   }
-}
-prevPageOutput() {
-  if (this.page() > 1) {
-    this.page.update(n => n - 1);
+
+  nextPageOutput() {
+    this.page.update(n => n + 1);
     this.loadBreweries();
-    this.disableNext = false;
-  } 
-}
+    if (this.tableData.data.length == 0 || this.tableData.data.length < 5) {
+      this.disableNext = true;
+    }
+  }
+  prevPageOutput() {
+    if (this.page() > 1) {
+      this.page.update(n => n - 1);
+      this.loadBreweries();
+      this.disableNext = false;
+    }
+  }
+  clearError() {
+    this.isError = false;
+    this.form.get('query')?.setValue('');
+
+  }
 
 
 }
