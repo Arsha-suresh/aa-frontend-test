@@ -27,12 +27,13 @@
 }
 @else {
     @if(showResultsAndHistory()){
-        <div>
+        <div class="history">
     <app-search-history (reRunSearch)="reRunSearch($event)" ></app-search-history>
 </div>
-         <app-table [data]="tableData" [columns]="columns" 
+       <div class="searchResults">  <app-table [data]="tableData" [columns]="columns" 
     (nextPageOutput)="nextPageOutput()" (prevPageOutput)="prevPageOutput()"
      (selId)="showDetails($event)" [page]="page()" [disableNext]="disableNext"></app-table>
+     </div>
     
         
         

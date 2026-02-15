@@ -77,7 +77,7 @@ export class Search implements OnInit {
     this.isError = false;
     if (this.query.trim() !== '' && this.form.valid) {
       this.store.clearBreweries();
-      this.loadUsers();
+      this.loadBreweries();
     
     } else {
       this.tableData = null as unknown as TableInput;
@@ -97,9 +97,7 @@ export class Search implements OnInit {
     this.form.get('query')?.setValue(query);
    this.search();
    
-  }
-
- 
+  } 
 
   showDetails(event:string){
     const breweryId = event;
@@ -113,7 +111,7 @@ export class Search implements OnInit {
     this.showResultsAndHistory.set(true);
   }
 
-  loadUsers() { 
+  loadBreweries() { 
       this.isError = false;
       this.facade.searchBreweries(this.query, this.page()).pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -142,7 +140,7 @@ export class Search implements OnInit {
 
 nextPageOutput() {
   this.page.update(n => n + 1);
-  this.loadUsers();
+  this.loadBreweries();
   if (this.tableData.data.length ==0 || this.tableData.data.length < 5) {
     this.disableNext = true;
   }
@@ -150,7 +148,7 @@ nextPageOutput() {
 prevPageOutput() {
   if (this.page() > 1) {
     this.page.update(n => n - 1);
-    this.loadUsers();
+    this.loadBreweries();
     this.disableNext = false;
   } 
 }
