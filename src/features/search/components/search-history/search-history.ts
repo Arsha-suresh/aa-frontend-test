@@ -22,8 +22,8 @@ export class SearchHistory implements OnInit {
   page = 1;
   reRunSearch = output<string>();
    showModal =signal(false);
-  title = signal('Confirm Search History Deletion');
-  message = signal('Are you sure to clear history Item');
+  title = signal('Clear Search History');
+  message = signal('Are you sure to clear search history');
 
   ngOnInit(): void {
    this.localStore.searchHistory$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(history => {
